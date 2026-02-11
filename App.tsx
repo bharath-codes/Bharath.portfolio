@@ -36,7 +36,7 @@ const App: React.FC = () => {
   return (
     <div className="min-h-screen bg-zinc-950 text-zinc-100 selection:bg-blue-500/30">
       <Navbar activeSection={activeSection} />
-      <main className="container mx-auto px-6 pt-24 space-y-32">
+      <main className="container mx-auto px-4 sm:px-6 pt-24 space-y-24 sm:space-y-32">
         <section id="home">
           <Hero />
         </section>

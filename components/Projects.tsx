@@ -6,13 +6,13 @@ export const Projects: React.FC = () => {
   const [filter, setFilter] = useState('All');
   const categories = ['All', 'Full Stack', 'Frontend', 'Backend'];
 
-  const filteredProjects = filter === 'All' 
+  const filteredProjects = filter === 'All'
     ? PROJECTS 
-    : PROJECTS.filter(p => p.category === filter);
+    : PROJECTS.filter((p) => p.category.toLowerCase() === filter.toLowerCase());
 
   return (
     <div className="space-y-16">
-      <div className="flex flex-col md:flex-row justify-between items-end gap-8">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-8">
         <div className="space-y-4">
           <div className="inline-block px-3 py-1 rounded-full border border-zinc-800 bg-zinc-900/50 text-[10px] font-bold text-zinc-500 uppercase tracking-[0.2em]">
             Portfolio
@@ -21,18 +21,22 @@ export const Projects: React.FC = () => {
           <p className="text-zinc-500 max-w-lg font-medium">Highlighting flagship builds like Infinity Customizations and small business digital transformations.</p>
         </div>
         
-        <div className="flex bg-zinc-900/50 p-1.5 rounded-2xl border border-zinc-900">
+        <div className="w-full md:w-auto overflow-x-auto pb-1">
+          <div className="inline-flex min-w-max bg-zinc-900/50 p-1.5 rounded-2xl border border-zinc-900">
           {categories.map((cat) => (
             <button
               key={cat}
+              type="button"
               onClick={() => setFilter(cat)}
-              className={`px-6 py-2.5 text-xs font-bold uppercase tracking-widest rounded-xl transition-all ${
+              aria-pressed={filter === cat}
+              className={`shrink-0 px-4 sm:px-6 py-2.5 text-xs font-bold uppercase tracking-widest rounded-xl transition-all ${
                 filter === cat ? 'bg-zinc-800 text-white shadow-xl' : 'text-zinc-500 hover:text-zinc-300'
               }`}
             >
               {cat}
             </button>
           ))}
+          </div>
         </div>
       </div>
 
@@ -56,9 +60,9 @@ export const Projects: React.FC = () => {
               </div>
             </div>
 
-            <div className="p-10 flex-1 flex flex-col">
+            <div className="p-6 sm:p-10 flex-1 flex flex-col">
               <div className="mb-8">
-                <h3 className="text-3xl font-bold text-white mb-4 tracking-tight">{project.title}</h3>
+                <h3 className="text-2xl sm:text-3xl font-bold text-white mb-4 tracking-tight">{project.title}</h3>
                 <p className="text-zinc-400 leading-relaxed text-sm mb-6">{project.description}</p>
                 <div className="flex flex-wrap gap-2 mb-6">
                   {project.techStack.map(tech => (
@@ -85,14 +89,26 @@ export const Projects: React.FC = () => {
                 <a href={project.liveLink} target="_blank" rel="noopener" className="flex-1 text-center py-4 text-xs bg-white text-zinc-950 rounded-2xl font-black uppercase tracking-widest hover:bg-blue-500 hover:text-white transition-all transform active:scale-95 shadow-lg shadow-white/5">
                   Launch Site
                 </a>
-                <a href={project.githubLink} className="flex-1 text-center py-4 text-xs bg-zinc-900 text-zinc-400 rounded-2xl font-black uppercase tracking-widest border border-zinc-800 hover:bg-zinc-800 hover:text-white transition-all transform active:scale-95">
-                  Case Study
-                </a>
+                {project.githubLink === '#' ? (
+                  <span className="flex-1 text-center py-4 text-xs bg-zinc-900/60 text-zinc-600 rounded-2xl font-black uppercase tracking-widest border border-zinc-800 cursor-not-allowed">
+                    Private Repo
+                  </span>
+                ) : (
+                  <a href={project.githubLink} target="_blank" rel="noopener" className="flex-1 text-center py-4 text-xs bg-zinc-900 text-zinc-400 rounded-2xl font-black uppercase tracking-widest border border-zinc-800 hover:bg-zinc-800 hover:text-white transition-all transform active:scale-95">
+                    Case Study
+                  </a>
+                )}
               </div>
             </div>
           </div>
         ))}
       </div>
+
+      {filteredProjects.length === 0 && (
+        <div className="rounded-3xl border border-zinc-800 bg-zinc-900/30 p-8 text-center">
+          <p className="text-zinc-400 text-sm">No projects available for this category right now.</p>
+        </div>
+      )}
     </div>
   );
 };
